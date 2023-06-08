@@ -4,24 +4,32 @@
 
 using namespace std;
 
-void Desc002(int* ptr,int gameLevel);
-void swap(int*a,int*b);
+// 게임함수
+void Desc002(int* ptr,int gameLevel); 
+// 스왑 함수
+void swap(int*a,int*b); 
 
 int main()
 {
     int gameLevel;
     srand(time(NULL));
 
+    // 유저 입력 gameLevel
     printf("원하시는 게임 난이도를 입력해 주세요(3~6)\n");
-    cin >> gameLevel;
+
+    scanf("%d",&gameLevel);
 
     system("clear");
 
+    //gameLevel에 따른 2차원 배열 설정
+    //배열의 경우 미리 설정해놓지 않으면 크기 설정이 다시되지 않기 때문에
+    //레벨별로 지역변수설정해주었습니다.
     if(gameLevel == 3)
     {
         int number[3][3] = {0,};
         int* ptr = &number[0][0];
-        Desc002(ptr,gameLevel);
+        //이차원배열 number[0][0] 값과 게임 레벨 함수에 입력
+        Desc002(ptr,gameLevel); 
     }
     else if(gameLevel == 4)
     {
@@ -45,25 +53,36 @@ int main()
     {
         printf("잘못입력했습니다. 게임을 다시 시작하세요.\n");
     }
-
-    
+    //gameLevel에 따른 2차원 배열 설정
 }
 
 
 void Desc002(int* ptr,int gameLevel)
 {   
-    int* ptr2 = ptr; //매개변수로 받아오 주소값(number[0][0]) 다른 포인터에 저장
-    char userInput = '0'; //유저 인풋값 선언 및 초기화(w,a,s,d)
+    //매개변수로 받아오 주소값(number[0][0]) 다른 포인터에 저장
+    int* ptr2 = ptr; 
+    //유저 인풋값 선언 및 초기화(w,a,s,d)
+    char userInput = '0'; 
+
+    //random에 필요한 변수 선언
     int random1 = 0,random2 =0, r=0;
+
+    //포인터 위치를 잡아주기 위한 변수 선언(배열 크기 선언)
     int gameLevelSize = gameLevel*gameLevel;
 
+    // 정답 비교를 위한 배열 선언
     int answer3[9] = {0,};
     int answer4[16] = {0,};
     int answer5[25] = {0,};
     int answer6[36] = {0,};
+    // 정답 비교를 위한 배열 선언
 
+    // 게임 클리어를 위한 변수
     int gameClear = 0;
+    // 게임 클리어를 위한 변수
 
+
+    // answer에 숫자 배열 입력해주는 구간
     if(gameLevel == 3)
     {
         for(int n = 0; n < gameLevelSize; n++)
@@ -120,14 +139,9 @@ void Desc002(int* ptr,int gameLevel)
             }
         }
     }
+    // answer에 숫자 배열 입력해주는 구간
 
-
-
-    // int answer3[9] = {1,2,3,4,5,6,7,8,0};
-    // int answer4[16] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0};
-    // int answer5[25] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,0};
-    // int answer6[36] = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,};
-
+    // main함수 내의 number[][]배열에 숫자를 넣어주는 구간
     for(int n = 0; n < gameLevelSize; n++)
     {
         if(n == gameLevelSize-1)
@@ -139,6 +153,8 @@ void Desc002(int* ptr,int gameLevel)
             *(ptr+n) = n+1;
         }
     }
+    // main함수 내의 number[][]배열에 숫자를 넣어주는 구간
+
 
     // 랜덤으로 섞어주는 구간
     while(r < 300)
@@ -148,6 +164,7 @@ void Desc002(int* ptr,int gameLevel)
         r++;
         swap(ptr+random1,ptr+random2);
     }
+    // 랜덤으로 섞어주는 구간
 
 
     // 포인터를 값 0과 일치시켜 주는 for문
@@ -155,15 +172,15 @@ void Desc002(int* ptr,int gameLevel)
     {
         if(*(ptr+n) == 0)
         {
-            ptr = ptr+n;
+            ptr = (ptr+n);
         }
     }
     // 포인터를 값 0과 일치시켜 주는 for문
 
-    
-
+    //gameClear점수가 게임 사이즈(배열 사이즈)보다 커지면 게임 종료
     while(gameClear < gameLevelSize)
     {
+        //사용자 wasd입력시 0을 상하좌우로 움직여주는 구간
         if(userInput == 'w'||userInput == 'W')
         {
             swap(ptr-gameLevel,ptr);
@@ -188,13 +205,15 @@ void Desc002(int* ptr,int gameLevel)
         {
             ptr = ptr;
         }
+        //사용자 wasd입력시 0을 상하좌우로 움직여주는 구간
 
+        //유저 입력값 초기화
         userInput = '0';
         
         //출력장치
         for(int n = 0; n < gameLevelSize; n++)
         {
-            printf("%d      ",*(ptr2+n));
+            printf("%2d  ",*(ptr2+n));
             if((n+1)%gameLevel == 0)
             {
                 printf("\n");
@@ -202,8 +221,10 @@ void Desc002(int* ptr,int gameLevel)
         }
         printf("\n");
 
+        //정답 비교구간 배열 사이즈 전체 비교
         for(int n = 0; n < gameLevelSize; n++)
         {   
+            //게임 레벨에 따라 answer값이 다름에 따라 if else문 사용
             if(gameLevel == 3)
             {
                 if(*(ptr2+n)==answer3[n])
@@ -232,16 +253,26 @@ void Desc002(int* ptr,int gameLevel)
                     gameClear++;
                 }
             }
+            //게임 레벨에 따라 answer값이 다름에 따라 if else문 사용
+        
         }
+        //정답 비교구간 배열 사이즈 전체 비교
 
+
+        //gameClear점수 초기화
         if(gameClear < gameLevelSize)
         {
             gameClear = 0;
         }
+        //gameClear점수 초기화
 
+        //유저 wasd값 입력
         cin >> userInput;
+
+        //화면 클리어
         system("clear");
-    }
+
+    }//while 게임종료
 
     system("clear");
     printf("축하합니다. 게임을 클리어 하셨습니다.\n");
